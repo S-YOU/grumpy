@@ -16,6 +16,7 @@
 
 """Visitor class for traversing Python statements."""
 
+import sys
 import ast
 import string
 import textwrap
@@ -298,6 +299,11 @@ class StatementVisitor(ast.NodeVisitor):
 
   def visit_FunctionDef(self, node):
     self._write_py_context(node.lineno)
+    # if node.decorator_list:
+    #   for x in node.decorator_list:
+    #     print >> sys.stderr, x.id, node, dir(node)
+    #   raise util.ParseError(
+    #       node, 'decorators not implemented: {}'.format(node.name))
     func = self.expr_visitor.visit_function_inline(node)
     self.block.bind_var(self.writer, node.name, func.expr)
 

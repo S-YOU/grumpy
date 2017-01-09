@@ -34,11 +34,11 @@ def _hasattr(C, attr):
 class Hashable(object):
     __metaclass__ = ABCMeta
 
-    @abstractmethod
+    # @abstractmethod
     def __hash__(self):
         return 0
 
-    @classmethod
+    # @classmethod
     def __subclasshook__(cls, C):
         if cls is Hashable:
             try:
@@ -57,12 +57,12 @@ class Hashable(object):
 class Iterable(object):
     __metaclass__ = ABCMeta
 
-    @abstractmethod
+    # @abstractmethod
     def __iter__(self):
         while False:
             yield None
 
-    @classmethod
+    # @classmethod
     def __subclasshook__(cls, C):
         if cls is Iterable:
             if _hasattr(C, "__iter__"):
@@ -74,7 +74,7 @@ Iterable.register(str)
 
 class Iterator(Iterable):
 
-    @abstractmethod
+    # @abstractmethod
     def next(self):
         'Return the next item from the iterator. When exhausted, raise StopIteration'
         raise StopIteration
@@ -82,7 +82,7 @@ class Iterator(Iterable):
     def __iter__(self):
         return self
 
-    @classmethod
+    # @classmethod
     def __subclasshook__(cls, C):
         if cls is Iterator:
             if _hasattr(C, "next") and _hasattr(C, "__iter__"):
@@ -93,11 +93,11 @@ class Iterator(Iterable):
 class Sized(object):
     __metaclass__ = ABCMeta
 
-    @abstractmethod
+    # @abstractmethod
     def __len__(self):
         return 0
 
-    @classmethod
+    # @classmethod
     def __subclasshook__(cls, C):
         if cls is Sized:
             if _hasattr(C, "__len__"):
@@ -108,11 +108,11 @@ class Sized(object):
 class Container(object):
     __metaclass__ = ABCMeta
 
-    @abstractmethod
+    # @abstractmethod
     def __contains__(self, x):
         return False
 
-    @classmethod
+    # @classmethod
     def __subclasshook__(cls, C):
         if cls is Container:
             if _hasattr(C, "__contains__"):
@@ -123,11 +123,11 @@ class Container(object):
 class Callable(object):
     __metaclass__ = ABCMeta
 
-    @abstractmethod
+    # @abstractmethod
     def __call__(self, *args, **kwds):
         return False
 
-    @classmethod
+    # @classmethod
     def __subclasshook__(cls, C):
         if cls is Callable:
             if _hasattr(C, "__call__"):
@@ -187,7 +187,7 @@ class Set(Sized, Iterable, Container):
     def __ne__(self, other):
         return not (self == other)
 
-    @classmethod
+    # @classmethod
     def _from_iterable(cls, it):
         '''Construct an instance of the class from any iterable input.
 
@@ -293,12 +293,12 @@ class MutableSet(Set):
     then the other operations will automatically follow suit.
     """
 
-    @abstractmethod
+    # @abstractmethod
     def add(self, value):
         """Add an element."""
         raise NotImplementedError
 
-    @abstractmethod
+    # @abstractmethod
     def discard(self, value):
         """Remove an element.  Do not raise an exception if absent."""
         raise NotImplementedError
@@ -374,7 +374,7 @@ class Mapping(Sized, Iterable, Container):
 
     """
 
-    @abstractmethod
+    # @abstractmethod
     def __getitem__(self, key):
         raise KeyError
 
@@ -503,11 +503,11 @@ class MutableMapping(Mapping):
 
     """
 
-    @abstractmethod
+    # @abstractmethod
     def __setitem__(self, key, value):
         raise KeyError
 
-    @abstractmethod
+    # @abstractmethod
     def __delitem__(self, key):
         raise KeyError
 
@@ -596,7 +596,7 @@ class Sequence(Sized, Iterable, Container):
     __getitem__, and __len__.
     """
 
-    @abstractmethod
+    # @abstractmethod
     def __getitem__(self, index):
         raise IndexError
 
@@ -648,15 +648,15 @@ class MutableSequence(Sequence):
 
     """
 
-    @abstractmethod
+    # @abstractmethod
     def __setitem__(self, index, value):
         raise IndexError
 
-    @abstractmethod
+    # @abstractmethod
     def __delitem__(self, index):
         raise IndexError
 
-    @abstractmethod
+    # @abstractmethod
     def insert(self, index, value):
         'S.insert(index, object) -- insert object before index'
         raise IndexError

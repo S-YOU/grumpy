@@ -208,12 +208,19 @@ class StatementVisitorTest(unittest.TestCase):
           print a, b
         foo('bar', 'baz')""")))
 
+  def testFunctionDefDecorator(self):
+    self.assertEqual((0, 'bar baz\n'), _GrumpRun(textwrap.dedent("""\
+        def foo(a, b):
+          print a, b
+        foo('bar', 'baz')""")))
+
   def testFunctionDefGenerator(self):
-    self.assertEqual((0, "['foo', 'bar']\n"), _GrumpRun(textwrap.dedent("""\
-        def gen():
-          yield 'foo'
-          yield 'bar'
-        print list(gen())""")))
+    expected = 'decorators not implemented'
+    self.assertRaisesRegexp(util.ParseError, expected,
+                            _ParseAndVisit, textwrap.dedent("""\
+        @staticmethod
+        def foo(a):
+          pass"""))
 
   def testFunctionDefGeneratorReturnValue(self):
     self.assertRaisesRegexp(

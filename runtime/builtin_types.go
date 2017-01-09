@@ -264,6 +264,17 @@ func builtinChr(f *Frame, args Args, _ KWArgs) (*Object, *BaseException) {
 	return NewStr(string([]byte{byte(i)})).ToObject(), nil
 }
 
+func builtinClassMethod(f *Frame, args Args, _ KWArgs) (*Object, *BaseException) {
+	if raised := checkFunctionArgs(f, "classmethod", args, ObjectType, ObjectType); raised != nil {
+		return nil, raised
+	}
+	m := toMethodUnsafe(args[1])
+	m.self = args[0]
+	return newBuiltinFunction("", func(f *Frame, args Args, kwargs KWArgs) (*Object, *BaseException) {
+		return methodCall(f, m.ToObject(), args, kwargs)
+	}).ToObject(), nil
+}
+
 func builtinDir(f *Frame, args Args, kwargs KWArgs) (*Object, *BaseException) {
 	// TODO: Support __dir__.
 	if raised := checkFunctionArgs(f, "dir", args, ObjectType); raised != nil {
@@ -552,6 +563,7 @@ func init() {
 		"bin":            newBuiltinFunction("bin", builtinBin).ToObject(),
 		"callable":       newBuiltinFunction("callable", builtinCallable).ToObject(),
 		"chr":            newBuiltinFunction("chr", builtinChr).ToObject(),
+		"classmethod":    newBuiltinFunction("classmethod", builtinClassMethod).ToObject(),
 		"dir":            newBuiltinFunction("dir", builtinDir).ToObject(),
 		"False":          False.ToObject(),
 		"getattr":        newBuiltinFunction("getattr", builtinGetAttr).ToObject(),

@@ -102,7 +102,7 @@ class UserDict(object):
         return self.data.popitem()
     def __contains__(self, key):
         return key in self.data
-    @classmethod
+    # @classmethod
     def fromkeys(cls, iterable, value=None):
         d = cls()
         for key in iterable:

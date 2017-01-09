@@ -215,7 +215,7 @@ class OrderedDict(dict):
         'od.copy() -> a shallow copy of od'
         return self.__class__(self)
 
-    @classmethod
+    # @classmethod
     def fromkeys(cls, iterable, value=None):
         '''OD.fromkeys(S[, v]) -> New ordered dictionary with keys from S.
         If not specified, the value defaults to None.
@@ -528,7 +528,7 @@ class Counter(dict):
 
     # Override dict methods where necessary
 
-    @classmethod
+    # @classmethod
     def fromkeys(cls, iterable, v=None):
         # There is no equivalent method for counters because setting v=1
         # means that no element can have a count greater than one.
