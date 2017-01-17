@@ -82,7 +82,7 @@ def _repr(self):
 def setattr(self, attr, value):
     self.__dict__[attr] = value
 
-INDENT_CHAR = "    "
+INDENT_CHAR = " "
 
 # This file was generated from:
 #   Id: option_parser.py 527 2006-07-23 15:21:30Z greg
@@ -318,7 +318,7 @@ class HelpFormatter(object):
             indent_first = self.help_position
         else:                       # start help on same line as opts
             # opts = "%*s%-*s  " % (self.current_indent, "", opt_width, opts)
-            opts = "%s%s  " % (self.current_indent * INDENT_CHAR + "", opt_width * INDENT_CHAR + opts)
+            opts = "%s%s  " % (self.current_indent * INDENT_CHAR, (opts + opt_width * INDENT_CHAR)[:opt_width])
             indent_first = 0
         result.append(opts)
         if option.help:
@@ -328,7 +328,7 @@ class HelpFormatter(object):
             result.append("%s%s\n" % (indent_first * INDENT_CHAR + "", help_lines[0]))
             # result.extend(["%*s%s\n" % (self.help_position, "", line)
             # result.extend(["%s%s\n" % (self.help_position * INDENT_CHAR + "", line)
-            #                for line in help_lines[1:]])
+                          #  for line in help_lines[1:]])
             result += (["%s%s\n" % (self.help_position * INDENT_CHAR + "", line)
                 for line in help_lines[1:]])
         elif opts[-1] != "\n":
