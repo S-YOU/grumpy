@@ -81,9 +81,11 @@ class IterFuncStop(object):
         raise StopIteration
 
 # from itertools import chain, imap
-# def itermulti(seqn):
-#     'Test multiple tiers of iterators'
-#     return chain(imap(lambda x:x, iterfunc(IterGen(Sequence(seqn)))))
+import itertools
+chain, imap = itertools.chain, itertools.imap
+def itermulti(seqn):
+    'Test multiple tiers of iterators'
+    return chain(imap(lambda x:x, iterfunc(IterGen(Sequence(seqn)))))
 
 class LyingTuple(tuple):
     def __iter__(self):
@@ -131,8 +133,7 @@ class CommonTest(unittest.TestCase):
         # Create from various iteratables
         for s in ("123", "", range(1000), ('do', 1.2), xrange(2000,2200,5)):
             for g in (Sequence, IterFunc, IterGen,
-                      # itermulti, iterfunc):
-                      iterfunc):
+                      itermulti, iterfunc):
                 self.assertEqual(self.type2test(g(s)), self.type2test(s))
             self.assertEqual(self.type2test(IterFuncStop(s)), self.type2test())
             self.assertEqual(self.type2test(c for c in "123"), self.type2test("123"))
@@ -323,14 +324,10 @@ class CommonTest(unittest.TestCase):
         import sys
         if sys.maxint <= 2147483647:
             x = self.type2test([0])
-            # x *= 2**16
-            # self.assertRaises(MemoryError, x.__mul__, 2**16)
-            # if hasattr(x, '__imul__'):
-            #     self.assertRaises(MemoryError, x.__imul__, 2**16)
-            x *= 1<<16
-            self.assertRaises(MemoryError, x.__mul__, 1<<16)
+            x *= 2**16
+            self.assertRaises(MemoryError, x.__mul__, 2**16)
             if hasattr(x, '__imul__'):
-                self.assertRaises(MemoryError, x.__imul__, 1<<16)
+                self.assertRaises(MemoryError, x.__imul__, 2**16)
 
     def test_subscript(self):
         a = self.type2test([10, 11])
