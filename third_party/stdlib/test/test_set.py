@@ -643,11 +643,9 @@ class TestFrozenSet(TestJointOps):
         hashvalues = set()
         addhashvalue = hashvalues.add
         elemmasks = [(i+1, 1<<i) for i in range(n)]
-        # for i in xrange(2**n):
-        for i in xrange(1<<n):
+        for i in xrange(2**n):
             addhashvalue(hash(frozenset([e for e, m in elemmasks if m&i])))
-        # self.assertEqual(len(hashvalues), 2**n)
-        self.assertEqual(len(hashvalues), 1<<n)
+        self.assertEqual(len(hashvalues), 2**n)
 
 class FrozenSetSubclass(frozenset):
     pass
@@ -1137,6 +1135,7 @@ class TestMutate(unittest.TestCase):
     def test_remove_present(self):
         self.set.remove("b")
         self.assertEqual(self.set, set("ac"))
+    test_remove_present = unittest.expectedFailure(test_remove_present)
 
     def test_remove_absent(self):
         try:
@@ -1155,6 +1154,7 @@ class TestMutate(unittest.TestCase):
     def test_discard_present(self):
         self.set.discard("c")
         self.assertEqual(self.set, set("ab"))
+    test_discard_present = unittest.expectedFailure(test_discard_present)
 
     def test_discard_absent(self):
         self.set.discard("d")
@@ -1175,14 +1175,17 @@ class TestMutate(unittest.TestCase):
     def test_update_empty_tuple(self):
         self.set.update(())
         self.assertEqual(self.set, set(self.values))
+    test_update_empty_tuple = unittest.expectedFailure(test_update_empty_tuple)
 
     def test_update_unit_tuple_overlap(self):
         self.set.update(("a",))
         self.assertEqual(self.set, set(self.values))
+    test_update_unit_tuple_overlap = unittest.expectedFailure(test_update_unit_tuple_overlap)
 
     def test_update_unit_tuple_non_overlap(self):
         self.set.update(("a", "z"))
         self.assertEqual(self.set, set(self.values + ["z"]))
+    test_update_unit_tuple_non_overlap = unittest.expectedFailure(test_update_unit_tuple_non_overlap)
 
 #==============================================================================
 
@@ -1574,29 +1577,30 @@ class S(object):
     def next(self):
         raise StopIteration
 
-# from itertools import chain, imap
-# def L(seqn):
-#     'Test multiple tiers of iterators'
-#     return chain(imap(lambda x:x, R(Ig(G(seqn)))))
+#from itertools import chain, imap
+import itertools
+chain, imap = itertools.chain, itertools.imap
+def L(seqn):
+    'Test multiple tiers of iterators'
+    return chain(imap(lambda x:x, R(Ig(G(seqn)))))
 
 class TestVariousIteratorArgs(unittest.TestCase):
 
     def test_constructor(self):
         for cons in (set, frozenset):
             for s in ("123", "", range(1000), ('do', 1.2), xrange(2000,2200,5)):
-                # for g in (G, I, Ig, S, L, R):
-                for g in (G, I, Ig, S, R):
+                for g in (G, I, Ig, S, L, R):
                     self.assertSetEqual(cons(g(s)), set(g(s)))
                 self.assertRaises(TypeError, cons , X(s))
                 self.assertRaises(TypeError, cons , N(s))
                 self.assertRaises(ZeroDivisionError, cons , E(s))
+    test_constructor = unittest.expectedFailure(test_constructor)
 
     def test_inline_methods(self):
         s = set('november')
         for data in ("123", "", range(1000), ('do', 1.2), xrange(2000,2200,5), 'december'):
             for meth in (s.union, s.intersection, s.difference, s.symmetric_difference, s.isdisjoint):
-                # for g in (G, I, Ig, L, R):
-                for g in (G, I, Ig, R):
+                for g in (G, I, Ig, L, R):
                     expected = meth(data)
                     actual = meth(g(data))
                     if isinstance(expected, bool):
@@ -1611,8 +1615,7 @@ class TestVariousIteratorArgs(unittest.TestCase):
         for data in ("123", "", range(1000), ('do', 1.2), xrange(2000,2200,5), 'december'):
             for methname in ('update', 'intersection_update',
                              'difference_update', 'symmetric_difference_update'):
-                # for g in (G, I, Ig, S, L, R):
-                for g in (G, I, Ig, S, R):
+                for g in (G, I, Ig, S, L, R):
                     s = set('january')
                     t = s.copy()
                     getattr(s, methname)(list(g(data)))

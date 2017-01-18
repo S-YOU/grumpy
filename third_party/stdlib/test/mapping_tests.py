@@ -1,5 +1,4 @@
 # tests common to dict and UserDict
-import math
 import unittest
 import UserDict
 from test import test_support
@@ -523,7 +522,7 @@ class TestMappingProtocol(BasicTestMappingProtocol):
             # -1: b has same structure as a
             # +1: b is a.copy()
             for log2size in range(12):
-                size = math.pow(2, log2size)
+                size = 2**log2size
                 a = self._empty_mapping()
                 b = self._empty_mapping()
                 for i in range(size):

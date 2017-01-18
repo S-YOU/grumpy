@@ -280,8 +280,7 @@ class IntTestCases(IntLongCommonTests, unittest.TestCase):
             self.assertEqual(k, len(bin(x).lstrip('-0b')))
             # Behaviour as specified in the docs
             if x != 0:
-                # self.assertTrue(2**(k-1) <= abs(x) < 2**k)
-                self.assertTrue(math.pow(2,(k-1)) <= abs(x) < math.pow(2, k))
+                self.assertTrue(2**(k-1) <= abs(x) < 2**k)
             else:
                 self.assertEqual(k, 0)
             # Alternative definition: x.bit_length() == 1 + floor(log_2(x))
@@ -299,8 +298,7 @@ class IntTestCases(IntLongCommonTests, unittest.TestCase):
         self.assertEqual((2).bit_length(), 2)
         self.assertEqual((-2).bit_length(), 2)
         for i in [2, 3, 15, 16, 17, 31, 32, 33, 63, 64]:
-            # a = 2**i
-            a = 1<<i
+            a = 2**i
             self.assertEqual((a-1).bit_length(), i)
             self.assertEqual((1-a).bit_length(), i)
             self.assertEqual((a).bit_length(), i+1)

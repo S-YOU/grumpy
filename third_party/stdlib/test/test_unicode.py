@@ -5,7 +5,6 @@ Written by Marc-Andre Lemburg (mal@lemburg.com).
 (c) Copyright CNRI, All Rights Reserved. NO WARRANTY.
 
 """#"
-import math
 import sys
 # import struct
 # import codecs
@@ -1400,9 +1399,9 @@ class UnicodeTest(
             def __format__(self, format_spec):
                 return 1.0
 
-        class I(datetime.date):
-            def __format__(self, format_spec):
-                return self.strftime(format_spec)
+        # class I(datetime.date):
+        #     def __format__(self, format_spec):
+        #          return self.strftime(format_spec)
 
         class J(int):
             def __format__(self, format_spec):

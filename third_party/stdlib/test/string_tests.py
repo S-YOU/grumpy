@@ -141,7 +141,7 @@ class CommonTest(unittest.TestCase):
         digits = 7
         base = len(charset)
         teststrings = set()
-        for i in xrange(math.pow(base, digits)):
+        for i in xrange(base ** digits):
             entry = []
             for j in xrange(digits):
                 i, m = divmod(i, base)
@@ -198,7 +198,7 @@ class CommonTest(unittest.TestCase):
         digits = 5
         base = len(charset)
         teststrings = set()
-        for i in xrange(math.pow(base, digits)):
+        for i in xrange(base ** digits):
             entry = []
             for j in xrange(digits):
                 i, m = divmod(i, base)
@@ -242,7 +242,7 @@ class CommonTest(unittest.TestCase):
         digits = 5
         base = len(charset)
         teststrings = set()
-        for i in xrange(math.pow(base, digits)):
+        for i in xrange(base ** digits):
             entry = []
             for j in xrange(digits):
                 i, m = divmod(i, base)
