@@ -383,6 +383,7 @@ func TestStrMethods(t *testing.T) {
 		{"replace", wrapArgs("one!two!three!", "x", "@", 2), NewStr("one!two!three!").ToObject(), nil},
 		{"replace", wrapArgs("\x10\xc4\x80\xe1\x80\x80\xe3\x80\x80\xe8\x80\x80\xef\xbf\xbf", "\xe3\x80\x80", " "), NewStr("\x10\xc4\x80\xe1\x80\x80 \xe8\x80\x80\xef\xbf\xbf").ToObject(), nil},
 		{"replace", wrapArgs("\x10\xc4\x80\xe1\x80\x80\xe3\x80\x80\xe8\x80\x80\xef\xbf\xbf", "\x80", " "), NewStr("\x10\xc4 \xe1  \xe3  \xe8  \xef\xbf\xbf").ToObject(), nil},
+		{"replace", wrapArgs("\xd0\xb2\xd0\xbe\xd0\xbb", "", "\x00", -1), NewStr("\x00\xd0\x00\xb2\x00\xd0\x00\xbe\x00\xd0\x00\xbb\x00").ToObject(), nil},
 		{"replace", wrapArgs("abc", "", "-"), NewStr("-a-b-c-").ToObject(), nil},
 		{"replace", wrapArgs("abc", "", "-", 3), NewStr("-a-b-c").ToObject(), nil},
 		{"replace", wrapArgs("abc", "", "-", 0), NewStr("abc").ToObject(), nil},

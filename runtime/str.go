@@ -482,6 +482,25 @@ func strReplace(f *Frame, args Args, _ KWArgs) (*Object, *BaseException) {
 	if len(s) == 0 && len(old) == 0 && n >= 0 {
 		return NewStr("").ToObject(), nil
 	}
+	if len(old) == 0 {
+		if n < 0 {
+			n = len(s)
+		}
+		buf := bytes.Buffer{}
+		if n > 0 {
+			buf.WriteString(sub)
+		}
+		for i := 0; i < len(s); {
+			buf.WriteByte(s[i])
+			i++
+			if i >= n {
+				buf.WriteString(s[i:])
+				break
+			}
+			buf.WriteString(sub)
+		}
+		return NewStr(buf.String()).ToObject(), nil
+	}
 	return NewStr(strings.Replace(s, old, sub, n)).ToObject(), nil
 }
 
