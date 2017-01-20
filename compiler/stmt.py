@@ -313,10 +313,10 @@ class StatementVisitor(ast.NodeVisitor):
     func = self.expr_visitor.visit_function_inline(node)
     self.block.bind_var(self.writer, node.name, func.expr)
     while node.decorator_list:
-      fn = node.decorator_list.pop()
+      decorator = node.decorator_list.pop()
       wrapped = ast.Name(node.name, ast.Load)
-      decorator = ast.Call(fn, [wrapped], [], None, None)
-      target = ast.Assign([wrapped], decorator)
+      decorated = ast.Call(decorator, [wrapped], [], None, None)
+      target = ast.Assign([wrapped], decorated)
       target.lineno = node.lineno + len(node.decorator_list)
       self.visit_Assign(target)
 
