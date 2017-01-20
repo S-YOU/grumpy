@@ -104,6 +104,22 @@ class StatementVisitorTest(unittest.TestCase):
     self.assertRaisesRegexp(util.ParseError, expected,
                             _ParseAndVisit, 'foo **= bar')
 
+  def testClassDecorator(self):
+    self.assertEqual((0, 'getattr: 1\n'), _GrumpRun(textwrap.dedent("""\
+        def decorator(cls):
+          class Wrapper(object):
+            def __init__(self, *args):
+              self.wrapped = cls(*args)
+            def __getattr__(self, name):
+              return 'getattr: %s' % getattr(self.wrapped, name)
+          return Wrapper
+        @decorator
+        class C(object):
+          def __init__(self, x):
+            self.x = x
+        x = C(1)
+        print(x.x)""")))
+
   def testClassDef(self):
     self.assertEqual((0, "<type 'type'>\n"), _GrumpRun(textwrap.dedent("""\
         class Foo(object):
@@ -115,17 +131,6 @@ class StatementVisitorTest(unittest.TestCase):
         class Foo(object):
           bar = 'abc'
         print Foo.bar""")))
-
-  def testDecorator(self):
-    self.assertEqual((0, '<b>foo</b>\n'), _GrumpRun(textwrap.dedent("""\
-        def bold(fn):
-          def wrapped():
-            return '<b>' + fn() + '</b>'
-          return wrapped
-        @bold
-        def foo():
-          return 'foo'
-        print foo()""")))
 
   def testDeleteAttribute(self):
     self.assertEqual((0, 'False\n'), _GrumpRun(textwrap.dedent("""\
@@ -222,6 +227,17 @@ class StatementVisitorTest(unittest.TestCase):
     self.assertRaisesRegexp(
         util.ParseError, "'continue' not in loop",
         _ParseAndVisit, 'for i in (1,):\n  pass\nelse:\n  continue')
+
+  def testFunctionDecorator(self):
+    self.assertEqual((0, '<b>foo</b>\n'), _GrumpRun(textwrap.dedent("""\
+        def bold(fn):
+          def wrapped():
+            return '<b>' + fn() + '</b>'
+          return wrapped
+        @bold
+        def foo():
+          return 'foo'
+        print foo()""")))
 
   def testFunctionDef(self):
     self.assertEqual((0, 'bar baz\n'), _GrumpRun(textwrap.dedent("""\

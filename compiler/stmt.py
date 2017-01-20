@@ -194,7 +194,7 @@ class StatementVisitor(ast.NodeVisitor):
     with body_visitor.writer.indent_block():
       body_visitor._visit_each(node.body)  # pylint: disable=protected-access
 
-    self._write_py_context(node.lineno)
+    self._write_py_context(node.lineno + len(node.decorator_list))
     with self.block.alloc_temp('*πg.Dict') as cls, \
         self.block.alloc_temp() as mod_name, \
         self.block.alloc_temp('[]*πg.Object') as bases, \
@@ -242,6 +242,13 @@ class StatementVisitor(ast.NodeVisitor):
             type_, type_expr, meta.expr,
             util.go_str(node.name), bases.expr, cls.expr)
         self.block.bind_var(self.writer, node.name, type_.expr)
+    while node.decorator_list:
+      decorator = node.decorator_list.pop()
+      wrapped = ast.Name(node.name, ast.Load)
+      decorated = ast.Call(decorator, [wrapped], [], None, None)
+      target = ast.Assign([wrapped], decorated)
+      target.lineno = node.lineno + len(node.decorator_list)
+      self.visit_Assign(target)
 
   def visit_Continue(self, node):
     if not self.block.loop_stack:
