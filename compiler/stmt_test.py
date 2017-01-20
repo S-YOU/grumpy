@@ -116,6 +116,17 @@ class StatementVisitorTest(unittest.TestCase):
           bar = 'abc'
         print Foo.bar""")))
 
+  def testDecorator(self):
+    self.assertEqual((0, '<b>foo</b>\n'), _GrumpRun(textwrap.dedent("""\
+        def bold(fn):
+          def wrapped():
+            return '<b>' + fn() + '</b>'
+          return wrapped
+        @bold
+        def foo():
+          return 'foo'
+        print foo()""")))
+
   def testDeleteAttribute(self):
     self.assertEqual((0, 'False\n'), _GrumpRun(textwrap.dedent("""\
         class Foo(object):
