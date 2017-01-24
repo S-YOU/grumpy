@@ -133,8 +133,11 @@ func functionRepr(_ *Frame, o *Object) (*Object, *BaseException) {
 func initFunctionType(map[string]*Object) {
 	FunctionType.flags &= ^(typeFlagInstantiable | typeFlagBasetype)
 	FunctionType.slots.Call = &callSlot{functionCall}
+	FunctionType.slots.DelAttr = &delAttrSlot{objectDelAttr}
 	FunctionType.slots.Get = &getSlot{functionGet}
+	FunctionType.slots.GetAttribute = &getAttributeSlot{objectGetAttribute}
 	FunctionType.slots.Repr = &unaryOpSlot{functionRepr}
+	FunctionType.slots.SetAttr = &setAttrSlot{objectSetAttr}
 }
 
 // staticMethod represents Python 'staticmethod' objects.
